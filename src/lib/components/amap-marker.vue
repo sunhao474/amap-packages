@@ -99,6 +99,7 @@ export default {
     };
   },
   created() {
+    console.log('marker created', this)
     this.tmpVM = new Vue({
       data() {
         return {node: ''};
@@ -111,10 +112,12 @@ export default {
   },
   methods: {
     __initComponent(options) {
+      console.log('amapmarker initComponent', options)
       if (this.$slots.default && this.$slots.default.length) {
         options.content = this.tmpVM.$refs.node;
       }
 
+      // options里如果带了Map对象，就不需要用Map的add方法了
       this.$amapComponent = new AMap.Marker(options);
     },
 
@@ -131,6 +134,7 @@ export default {
     }
   },
   render(h) {
+    console.log(this.tmpVM)
     const slots = this.$slots.default || [];
     if (slots.length) {
       this.tmpVM.node = slots;

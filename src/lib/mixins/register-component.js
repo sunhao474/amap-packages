@@ -15,6 +15,7 @@ export default {
   mounted() {
     if (lazyAMapApiLoaderInstance) {
       lazyAMapApiLoaderInstance.load().then(() => {
+        // 加载自定义适配器
         this.__contextReady && this.__contextReady.call(this, this.convertProps());
       });
     }
@@ -63,10 +64,13 @@ export default {
       }, props);
     },
 
-    convertSignalProp(key, sourceData) {
+    convertSignalProp(key, sourceData, print) {
       let converter = '';
       let type = '';
 
+      if (print) {
+        console.log('convertSignalProp', key, sourceData)
+      }
       if (this.amapTagName) {
         try {
           const name = upperCamelCase(this.amapTagName).replace(/^El/, '');
@@ -113,10 +117,14 @@ export default {
 
       Object.keys(propsData).forEach(prop => {
         let handleProp = prop;
+        let print = handleProp === 'zoomEnable';
         if (propsRedirect && propsRedirect[prop]) handleProp = propsRedirect[prop];
         let handleFun = this.getHandlerFun(handleProp);
         if (!handleFun && prop !== 'events') return;
 
+        if (print) {
+          console.log('****setPropWatchers', prop, handleFun)
+        }
         // watch props
         const unwatch = this.$watch(prop, nv => {
           if (prop === 'events') {
@@ -128,7 +136,18 @@ export default {
             return handleFun.call(this.$amapComponent, {[handleProp]: this.convertSignalProp(prop, nv)});
           }
 
-          handleFun.call(this.$amapComponent, this.convertSignalProp(prop, nv));
+          if (print) {
+            console.log('****setPropWatchers', prop, nv, handleFun);
+            console.log(this.$amapComponent);
+            console.log(this.convertSignalProp(prop, nv))
+          }
+
+          if (this.handlers && this.handlers[prop]) {
+            this.handlers[prop](this.convertSignalProp(prop, nv, print));
+          } else {
+            handleFun.call(this.$amapComponent, this.convertSignalProp(prop, nv, print));
+          }
+
         });
 
         // collect watchers for destroyed

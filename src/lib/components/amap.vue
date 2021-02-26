@@ -112,17 +112,20 @@ export default {
     return {
       converters: {
         center(arr) {
+          console.log('call converters in amap');
           return toLngLat(arr);
         }
       },
       handlers: {
-        zoomEnable(flag) {
+        zoomEnable: (flag) => {
+          console.log('handlers zoomEnable')
+          console.log(this)
           this.setStatus({zoomEnable: flag});
         },
-        dragEnable(flag) {
+        dragEnable:(flag) => {
           this.setStatus({dragEnable: flag});
         },
-        rotateEnable(flag) {
+        rotateEnable: (flag) => {
           this.setStatus({rotateEnable: flag});
         }
       }
@@ -203,7 +206,9 @@ export default {
     },
 
     setStatus(option) {
+      console.log('map')
       this.$amap.setStatus(option);
+      // this.$amap.setStatus.call(this.$amap, option)
     },
 
     createMap() {

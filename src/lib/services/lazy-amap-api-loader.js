@@ -25,7 +25,6 @@ export default class AMapAPILoader {
   }
 
   load() {
-    console.log('load')
     if (this._window.AMap && this._window.AMap.Map) {
       return this.loadUIAMap();
     }
@@ -41,6 +40,7 @@ export default class AMapAPILoader {
 
     this._scriptLoadingPromise = new Promise((resolve, reject) => {
       this._window['amapInitComponent'] = () => {
+        console.log(this._queueEvents)
         while (this._queueEvents.length) {
           this._queueEvents.pop().apply();
         }

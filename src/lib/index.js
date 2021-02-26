@@ -44,6 +44,7 @@ let VueAMap = {
 };
 
 VueAMap.install = (Vue) => {
+  console.log('**********install AMap', VueAMap);
   if (VueAMap.installed) return;
   Vue.config.optionMergeStrategies.deferredReady = Vue.config.optionMergeStrategies.created;
   components.map(_component => {
@@ -57,6 +58,7 @@ VueAMap.install = (Vue) => {
 
 const install = function(Vue, opts = {}) {
   /* istanbul ignore if */
+  console.log('**********install AMap', install);
   if (install.installed) return;
   VueAMap.install(Vue);
 };

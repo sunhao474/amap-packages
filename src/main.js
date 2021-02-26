@@ -4,6 +4,7 @@ import router from './router'
 import VueAMap from './lib'
 
 Vue.use(VueAMap)
+VueAMap.install(Vue)
 
 VueAMap.initAMapApiLoader({
   key: '9c581cda99009010a4212703098afe19',
