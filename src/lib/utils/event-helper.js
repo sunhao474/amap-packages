@@ -14,6 +14,7 @@ class EventHelper {
 
   addListener(instance, eventName, handler, context) {
     if (!AMap.event) throw new Error('please wait for Map API load');
+    console.log(this)
     let listener = AMap.event.addListener(instance, eventName, handler, context);
     if (!this._listener.get(instance)) this._listener.set(instance, {});
     let listenerMap = this._listener.get(instance);

@@ -97,6 +97,8 @@ export default {
       if (!this.$options.propsData) return;
       if (this.$options.propsData.events) {
         for (let eventName in this.events) {
+          // this这里指向混入目标components，比如amapMarker调用，就是amapMarker那个组件。
+          // events是一个键值对 { eventName: () => {} }，注意值要用箭头函数，否则会有指向问题
           eventHelper.addListener(this.$amapComponent, eventName, this.events[eventName]);
         }
       }
@@ -142,12 +144,7 @@ export default {
             console.log(this.convertSignalProp(prop, nv))
           }
 
-          if (this.handlers && this.handlers[prop]) {
-            this.handlers[prop](this.convertSignalProp(prop, nv, print));
-          } else {
-            handleFun.call(this.$amapComponent, this.convertSignalProp(prop, nv, print));
-          }
-
+          handleFun.call(this.$amapComponent, this.convertSignalProp(prop, nv, print));
         });
 
         // collect watchers for destroyed

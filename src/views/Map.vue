@@ -3,12 +3,14 @@
     <div @click="changeTitie">Map</div>
     <button @click="toggleZoomEnable">切换缩放</button>
     <button @click="changeCenter">切换中心点</button>
+    <span>点击坐标x{{ long }} y {{ lat }}</span>
       <el-amap
         class="amap-box"
         :vid="'amap-vue'"
         :zoomEnable="zoomEnable"
         :center="center"
         :zoom="14"
+        :events="events"
       >
         <el-amap-marker :title="title"/>
         <el-amap-bezier-curve
@@ -40,7 +42,16 @@ export default {
       title: 'hello',
       zoomEnable: true,
       district: 'bj',
-      center: [ 116.397637, 39.900001 ]
+      center: [ 116.397637, 39.900001 ],
+      events: {
+        click: (val) => {
+          console.log(this)
+          this.long = val.lnglat.lng;
+          this.lat = val.lnglat.lat;
+        }
+      },
+      lat: 0,
+      long: 0,
     }
   },
   methods: {
